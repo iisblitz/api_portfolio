@@ -2,16 +2,17 @@ const express = require('express');
 const exp = express();
 const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } = require('firebase/firestore');
-const bP = require('body-parser')
-const cors = require('cors')
+const bP = require('body-parser');
+const cors = require('cors');
 
 const corsOptions = {
   origin: ['http://localhost:3001', 'http://localhost:3000'],
 };
+
 exp.use(cors(corsOptions));
-exp.use(bP.json())
-exp.use(cors())
-const port =  process.env.PORT || 3001 
+exp.use(bP.json());
+
+const port = process.env.PORT || 3001;
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBvMG8Ne9hMURKaO6VZnfORy1Mz05VkBs",
@@ -21,6 +22,7 @@ const firebaseConfig = {
   messagingSenderId: "386061872411",
   appId: "1:386061872411:web:981e9b239689d7f47237be"
 };
+
 initializeApp(firebaseConfig)
 const db = getFirestore()
 
@@ -54,7 +56,6 @@ exp.get('/notes', async (req, res)=> {
   const events = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id}))
   res.json(events)
 })
-
 exp.post('/', async (req, res) => {
   try {
     const docRef = await addDoc(collection(db, 'Timeline'), req.body);
@@ -100,9 +101,6 @@ exp.post('/notes', async (req, res) => {
     res.status(500).json({ error: 'Could not add document' });
   }
 });
-
-
-
 exp.delete('/:id', async (req, res) => {
   try {
     await deleteDoc(doc(db, 'Timeline', req.params.id));
@@ -148,7 +146,6 @@ exp.delete('/notes/:id', async (req, res) => {
     res.status(500).json({ error: 'Could not delete document' });
   }
 });
-
 exp.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
