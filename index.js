@@ -43,18 +43,6 @@ exp.get('/texts', async (req, res) => {
   const events = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   res.json(events);
 });
-exp.get('/catalog', async (req, res) => {
-  const colRef = collection(db,'Catalog');
-  const snapshot = await getDocs(colRef);
-  const events = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id}));
-  res.json(events)
-})
-exp.get('/notes', async (req, res)=> {
-  const colRef = collection(db, 'Notes');
-  const snapshot = await getDocs(colRef);
-  const events = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id}))
-  res.json(events)
-})
 exp.post('/', async (req, res) => {
   try {
     const docRef = await addDoc(collection(db, 'Timeline'), req.body);
@@ -82,24 +70,6 @@ exp.post('/texts', async (req, res) => {
     res.status(500).json({ error: 'Could not add document' });
   }
 });
-exp.post('/catalog', async (req, res) => {
-  try {
-    const docRef = await addDoc(collection(db, 'Catalog'), req.body);
-    res.json({ id: docRef.id });
-  } catch (error) {
-    console.error('Error adding document: ', error);
-    res.status(500).json({ error: 'Could not add document' });
-  }
-});
-exp.post('/notes', async (req, res) => {
-  try {
-    const docRef = await addDoc(collection(db, 'Notes'), req.body);
-    res.json({ id: docRef.id });
-  } catch (error) {
-    console.error('Error adding document: ', error);
-    res.status(500).json({ error: 'Could not add document' });
-  }
-});
 exp.delete('/:id', async (req, res) => {
   try {
     await deleteDoc(doc(db, 'Timeline', req.params.id));
@@ -121,24 +91,6 @@ exp.delete('/art/:id', async (req, res) => {
 exp.delete('/texts/:id', async (req, res) => {
   try {
     await deleteDoc(doc(db, 'Texts', req.params.id));
-    res.json({ message: 'Document deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting document: ', error);
-    res.status(500).json({ error: 'Could not delete document' });
-  }
-});
-exp.delete('/catalog/:id', async (req, res) => {
-  try {
-    await deleteDoc(doc(db, 'Catalog', req.params.id));
-    res.json({ message: 'Document deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting document: ', error);
-    res.status(500).json({ error: 'Could not delete document' });
-  }
-});
-exp.delete('/notes/:id', async (req, res) => {
-  try {
-    await deleteDoc(doc(db, 'Notes', req.params.id));
     res.json({ message: 'Document deleted successfully' });
   } catch (error) {
     console.error('Error deleting document: ', error);
