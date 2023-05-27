@@ -1,16 +1,15 @@
 const express = require('express');
-const exp = express();
+const app = express();
 const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } = require('firebase/firestore');
-const bP = require('body-parser');
 const cors = require('cors');
 
 const corsOptions = {
   origin: ['http://localhost:3001', 'http://localhost:3000'],
 };
 
-exp.use(cors(corsOptions));
-exp.use(bP.json());
+app.use(cors(corsOptions));
+app.use(express.json());
 
 const port = process.env.PORT || 3001;
 
